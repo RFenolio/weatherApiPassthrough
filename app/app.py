@@ -9,6 +9,8 @@ stuff = {'theFirst': 1,
 
 DARK_URL = 'https://api.darksky.net/forecast/%s/%s,%s?exclude=[daily,hourly,minutely,alerts,flags]'
 OPEN_URL = 'http://api.openweathermap.org/data/2.5/weather?lat=%s&lon=%s&APPID=%s'
+DARK_API_KEY = os.environ.get('DARK_API_KEY')
+OPEN_API_KEY = os.environ.get('OPEN_API_KEY')
 LAT = '40.7128'
 LONG = '-74.0059'
 
@@ -21,12 +23,12 @@ def root():
 def get_dark_weather():
     lat = request.args.get('lat', LAT)
     lon = request.args.get('lon', LONG)
-    r = requests.get(DARK_URL %(os.environ.get('DARK_API_KEY'), lat, lon))
-    return r.json()
+    r = requests.get(DARK_URL %(DARK_API_KEY, lat, lon))
+    return jsonify(r.json())
 
 @app.route('/open')
-def get_open_weather(lat, long):
+def get_open_weather():
     lat = request.args.get('lat', LAT)
     lon = request.args.get('lon', LONG)
-    r = requests.get(OPEN_URL %(lat, lon, os.environ.get('OPEN_API_KEY')))
-    return r.json()
+    r = requests.get(OPEN_URL %(lat, lon, OPEN_API_KEY))
+    return jsonify(r.json())
