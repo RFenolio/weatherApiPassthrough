@@ -15,22 +15,18 @@ LONG = '-74.0059'
 
 @app.route('/')
 def root():
+    return "Hi, this is my site to redirect weather API calls so I can deploy on codepen"
+
+@app.route('/dark')
+def get_dark_weather():
     lat = request.args.get('lat', LAT)
-    long = request.args.get('long', LONG)
-    service = request.args.get('service', 'dark')
-    if service == 'dark':
-        return jsonify(get_dark_weather(lat, long))
-    elif service == 'open':
-        return jsonify(get_open_weather(lat, long))
-    else:
-        return "did you make a mistake?"
-
-
-
-def get_dark_weather(lat, long):
-    r = requests.get(DARK_URL %(os.environ.get('DARK_API_KEY'), lat, long))
+    lon = request.args.get('lon', LONG)
+    r = requests.get(DARK_URL %(os.environ.get('DARK_API_KEY'), lat, lon))
     return r.json()
 
+@app.route('/open')
 def get_open_weather(lat, long):
-    r = requests.get(OPEN_URL %(lat, long, os.environ.get('OPEN_API_KEY')))
+    lat = request.args.get('lat', LAT)
+    lon = request.args.get('lon', LONG)
+    r = requests.get(OPEN_URL %(lat, lon, os.environ.get('OPEN_API_KEY')))
     return r.json()
